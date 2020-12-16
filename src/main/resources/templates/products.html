@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>Products</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Фильтр</h1>
+    <form method="get" th:action="@{'/products'}">
+        <input class="form-control" th:value="${param.min_cost != null ? param.min_cost : ''}" type="number" placeholder="Минимальная цена" name="min_cost"/>
+        <input class="form-control" th:value="${param.max_cost != null ? param.max_cost : ''}" type="number" placeholder="Максимальная цена" name="max_cost"/>
+        <button class="btn btn-primary" type="submit">Найти</button>
+    </form>
+    <h1>Список товаров</h1>
+    <table class="table table-hover">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Наименование</th>
+            <th>Цена</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s : ${products}">
+            <td th:text="${s.id}"/>
+            <td th:text="${s.title}"/>
+            <td th:text="${s.cost}"/>
+            <td>
+                <a class="btn btn-danger" th:href="@{'/products/delete/' + ${s.id}}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <span th:unless="${products.size() > 0}">Товара нет</span>
+    <span th:text="'Количество товара: ' + ${products.size()}"/>
+    <form th:action="@{'/products/add'}" method="post">
+        <label>id</label>
+        <input type="number" name="id">
+        <label>Название товара</label>
+        <input type="text" name="title">
+        <label>Цена</label>
+        <input type="number" name="cost">
+        <button class="btn btn-primary" type="submit">Создать</button>
+    </form>
+</div>
+
+</body>
+</html>
